@@ -12,6 +12,32 @@ import {
   buildBlock,
   readBlockConfig,
 } from './aem.js';
+import {
+  initMartech,
+  martechEager,
+  martechLazy,
+  martechDelayed,
+  // eslint-disable-next-line import/no-relative-packages
+} from '../plugins/martech/src/index.js';
+
+// Adobe Experience Platform Web SDK configuration.
+// Datastream ID and Org ID come from Data Collection → Datastreams / your org.
+// These are public client-side identifiers (safe to commit), not secrets.
+const MARTECH_WEB_SDK_CONFIG = {
+  datastreamId: '8b082166-1bea-41ac-9f3b-f5d9f691bc86',
+  orgId: '8AB51935659C10E40A495FA2@AdobeOrg',
+  defaultConsent: 'pending',
+};
+
+// Library behaviour. Personalization (Target/AJO decisioning) is OFF for now —
+// this collects events + populates the data layer. Flip `personalization` to
+// true (and add decisionScopes) once AJO campaigns are ready.
+const MARTECH_CONFIG = {
+  analytics: true,
+  dataLayer: true,
+  personalization: false,
+  launchUrls: ['https://assets.adobedtm.com/962ef22b31a8/d5c300c59d31/launch-261b0b21b771-development.min.js'],
+};
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -189,11 +215,20 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   decorateTemplateAndTheme();
+
+  // Initialize Adobe Web SDK as early as possible so event collection (and, once
+  // enabled, AJO/Target personalization) is ready before LCP. Kicks off in
+  // parallel with the eager section render below.
+  const martechLoadedPromise = initMartech(MARTECH_WEB_SDK_CONFIG, MARTECH_CONFIG);
+
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    await Promise.all([
+      martechLoadedPromise.then(() => martechEager()),
+      loadSection(main.querySelector('.section'), waitForFirstImage),
+    ]);
   }
 
   try {
@@ -224,6 +259,9 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  // Send the deferred analytics/page-view events (kept off the LCP path).
+  await martechLazy();
 }
 
 /**
@@ -231,8 +269,12 @@ async function loadLazy(doc) {
  * without impacting the user experience.
  */
 function loadDelayed() {
-  import('./consent-check.js');
-  // load anything that can be postponed to the latest here
+  // eslint-disable-next-line import/no-cycle
+  window.setTimeout(() => {
+    martechDelayed(); // loads Launch/Tags container(s) well after LCP
+    import('./consent-check.js');
+    // load anything that can be postponed to the latest here
+  }, 3000);
 }
 
 async function loadPage() {

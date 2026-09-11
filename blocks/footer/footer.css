@@ -1,20 +1,175 @@
+/* Heineken footer — dark green band with promo, sign-up form, links, legal */
 footer {
-  background-color: var(--light-color);
+  background-color: #005d1f;
+  color: #fff;
   font-size: var(--body-font-size-xs);
 }
 
-footer .footer > div {
-  margin: auto;
+footer .footer {
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: auto;
+  padding: 0 24px 32px;
 }
 
 footer .footer p {
+  margin: 0 0 12px;
+}
+
+footer .footer a:any-link {
+  color: #fff;
+}
+
+footer .footer img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* promo — "Get Heineken on Demand" (white heading area over the promo image) */
+footer .footer-promo {
+  display: grid;
+  gap: 20px;
+  align-items: center;
+  padding: 32px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 20%);
+}
+
+footer .footer-promo h3 {
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+footer .footer-promo img {
+  width: 100%;
+  border-radius: 4px;
+}
+
+footer .footer-promo a:any-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 12px 24px;
+  border: 2px solid #fff;
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+/* sign-up form */
+footer .footer-signup {
+  padding: 32px 0;
+  text-align: center;
+}
+
+footer .footer-signup img {
+  width: 140px;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+footer .footer-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 520px;
+  margin: 16px auto 0;
+}
+
+footer .footer-signup-form input[type="text"],
+footer .footer-signup-form input[type="email"],
+footer .footer-signup-form input[type="tel"] {
+  padding: 12px 14px;
+  border: 1px solid #999;
+  border-radius: 8px;
+  background: #dcdcdc;
+  color: #333;
+  font: inherit;
+}
+
+footer .footer-consent {
+  display: flex;
+  gap: 8px;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+footer .footer-consent input {
+  flex: 0 0 auto;
+  margin-top: 3px;
+}
+
+footer .footer-required-note {
+  text-align: left;
+  font-size: 12px;
+}
+
+footer .footer-signup-form button {
+  margin-top: 4px;
+  padding: 15px 20px;
+  border: 2px solid #000;
+  border-radius: 0;
+  background: #fff;
+  color: var(--brand-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* links + social */
+footer .footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 0;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  text-align: center;
+}
+
+footer .footer-links img {
+  width: 60px;
+}
+
+footer .footer-links ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
   margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+footer .footer-links ul + ul {
+  gap: 16px;
+}
+
+footer .footer-links ul + ul img {
+  width: 24px;
+}
+
+footer .footer-links a:any-link {
+  font-size: 15px;
+  text-decoration: none;
+}
+
+/* legal */
+footer .footer-legal {
+  padding-top: 24px;
+  border-top: 1px solid rgb(255 255 255 / 20%);
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.85;
 }
 
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer {
+    padding: 0 32px 32px;
+  }
+
+  footer .footer-promo {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
   }
 }

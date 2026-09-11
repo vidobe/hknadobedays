@@ -1,6 +1,6 @@
-/* header and nav layout */
+/* header and nav layout — Heineken light blue-grey brand bar */
 header .nav-wrapper {
-  background-color: var(--background-color);
+  background-color: #d0e0e3;
   width: 100%;
   z-index: 2;
   position: fixed;
@@ -55,7 +55,7 @@ header nav p {
 }
 
 header nav a:any-link {
-  color: currentcolor;
+  color: var(--brand-color);
 }
 
 /* hamburger */
@@ -142,15 +142,55 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
 /* brand */
 header .nav-brand {
   grid-area: brand;
-  flex-basis: 128px;
+  flex-basis: 100px;
   font-size: var(--heading-font-size-s);
   font-weight: 700;
   line-height: 1;
 }
 
 header nav .nav-brand img {
-  width: 128px;
+  width: 100px;
   height: auto;
+}
+
+header nav .nav-brand p {
+  margin: 0;
+}
+
+/* tools — locale (EN/ES) + social icons */
+header nav .nav-tools {
+  grid-area: tools;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+header nav .nav-tools ul {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+header nav .nav-tools a:any-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--brand-color);
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+header nav .nav-tools img {
+  width: 20px;
+  height: 20px;
+}
+
+/* On mobile the tools row sits at the bottom of the open drawer */
+header nav[aria-expanded='true'] .nav-tools {
+  padding: 16px 0;
 }
 
 /* sections */
@@ -174,7 +214,10 @@ header nav .nav-sections ul {
 }
 
 header nav .nav-sections ul > li {
-  font-weight: 500;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.3px;
 }
 
 header nav .nav-sections ul > li > ul {
@@ -183,6 +226,8 @@ header nav .nav-sections ul > li > ul {
 
 header nav .nav-sections ul > li > ul > li {
   font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 @media (width >= 900px) {
@@ -266,7 +311,5 @@ header nav .nav-sections ul > li > ul > li {
   }
 }
 
-/* tools */
-header nav .nav-tools {
-  grid-area: tools;
-}
+/* tools styling lives just after the brand block, above the sections rules,
+   to satisfy stylelint no-descending-specificity ordering. */
