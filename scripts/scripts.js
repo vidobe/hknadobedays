@@ -17,6 +17,7 @@ import {
   martechEager,
   martechLazy,
   martechDelayed,
+  sendAnalyticsEvent,
   // eslint-disable-next-line import/no-relative-packages
 } from '../plugins/martech/src/index.js';
 
@@ -29,15 +30,60 @@ const MARTECH_WEB_SDK_CONFIG = {
   defaultConsent: 'pending',
 };
 
-// Library behaviour. Personalization (Target/AJO decisioning) is OFF for now —
-// this collects events + populates the data layer. Flip `personalization` to
-// true (and add decisionScopes) once AJO campaigns are ready.
+// Named AJO/Target decision scope for the hero offer. Author a web campaign in
+// Adobe Journey Optimizer against this scope name to deliver the hero offer.
+const HERO_OFFER_SCOPE = 'hero-offer';
+
+// Library behaviour. Personalization (AJO/Target decisioning) is ON: decisions
+// for HERO_OFFER_SCOPE (plus the implicit `__view__` page scope) are fetched in
+// the eager phase and applied before LCP (no flicker). AJO visual/DOM-action
+// offers auto-render; custom HTML/JSON offers render via applyHeroOffer() below.
 const MARTECH_CONFIG = {
   analytics: true,
   dataLayer: true,
-  personalization: false,
+  personalization: true,
+  decisionScopes: [HERO_OFFER_SCOPE],
   launchUrls: ['https://assets.adobedtm.com/962ef22b31a8/d5c300c59d31/launch-261b0b21b771-development.min.js'],
 };
+
+/**
+ * Renders a code-based (HTML) AJO offer for the hero-offer scope into a
+ * placeholder. Visual/VEC offers (authored against a CSS selector) render
+ * automatically via the plugin; this handles custom HTML/JSON code offers,
+ * which the plugin fetches but leaves for project code to place.
+ *
+ * Add a placeholder to any page/section that should show the offer:
+ *   <div class="hero-offer" data-decision-scope="hero-offer"></div>
+ *
+ * @param {Object} response The alloy propositionFetch response (from martechEager)
+ */
+function applyHeroOffer(response) {
+  const slot = document.querySelector('.hero-offer[data-decision-scope="hero-offer"]');
+  if (!slot) return;
+
+  const proposition = (response?.propositions || [])
+    .find((p) => p.scope === HERO_OFFER_SCOPE);
+  const htmlItem = proposition?.items
+    ?.find((i) => i.data?.content && /html/i.test(i.data?.format || 'text/html'));
+  if (!htmlItem) return;
+
+  slot.innerHTML = htmlItem.data.content;
+
+  // Report the display back to AJO so impression metrics are captured.
+  sendAnalyticsEvent({
+    eventType: 'decisioning.propositionDisplay',
+    _experience: {
+      decisioning: {
+        propositions: [{
+          id: proposition.id,
+          scope: proposition.scope,
+          scopeDetails: proposition.scopeDetails,
+        }],
+        propositionEventType: { display: 1 },
+      },
+    },
+  });
+}
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
