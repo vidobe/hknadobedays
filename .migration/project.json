@@ -1,0 +1,12 @@
+{
+  "type": "da",
+  "sites": {
+    "hknadobedays": {
+      "previewOrg": "vidobe",
+      "previewSite": "hknadobedays",
+      "contentHostUrl": "https://content.da.live/vidobe/hknadobedays/",
+      "libraryUrl": "https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json",
+      "botProtected": true
+    }
+  }
+}

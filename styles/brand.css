@@ -1,0 +1,40 @@
+/*
+ * brand.css — design tokens extracted from
+ * https://www.heineken.com/us/en/campaigns/player00hub
+ *
+ * Heading font "HeinekenSerif18" is a proprietary self-hosted Heineken face
+ * (not available on Typekit/Google Fonts); it falls back to a serif stack.
+ * Body font "PT Sans" is loaded from Google Fonts (see head.html).
+ */
+
+:root {
+  /* fonts */
+  --heading-font-family: "HeinekenSerif18", "PT Serif", georgia, serif;
+  --body-font-family: "PT Sans", helvetica, arial, sans-serif;
+
+  /* colors */
+  --background-color: #fff;
+  --text-color: #999;
+  --brand-color: #13670b;
+  --link-color: #13670b;
+  --link-hover-color: #0d4708;
+  --light-color: #ededed;
+  --dark-color: #13670b;
+
+  /* spacing */
+  --section-padding: 60px;
+  --nav-height: 64px;
+
+  /* heading sizes (desktop) */
+  --heading-font-size-xxl: 36px;
+  --heading-font-size-xl: 32px;
+  --heading-font-size-l: 26px;
+  --heading-font-size-m: 20px;
+  --heading-font-size-s: 18px;
+  --heading-font-size-xs: 16px;
+
+  /* body sizes */
+  --body-font-size-m: 18px;
+  --body-font-size-s: 16px;
+  --body-font-size-xs: 14px;
+}

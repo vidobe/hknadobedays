@@ -1,0 +1,10 @@
+{
+  "variantName": "embed-video",
+  "baseBlock": "embed",
+  "visualCharacteristics": "White background, minimal chrome, single full-width responsive 16:9 video centered on the page (max-width 800px). No overlaid text or captions.",
+  "contentPattern": "One block with a single cell containing an external video URL (YouTube or Vimeo). An optional poster image above the link becomes a click-to-play placeholder.",
+  "usage": "Use to embed a single external video (YouTube/Vimeo) inline in the page flow.",
+  "canonicalModel": "standalone",
+  "options": [],
+  "memberVariantIds": ["embed-video"]
+}

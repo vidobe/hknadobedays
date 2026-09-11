@@ -1,0 +1,10 @@
+{
+  "variantName": "cards-events",
+  "baseBlock": "cards",
+  "visualCharacteristics": "Promo card grid inside a grey section, three cards per row on desktop (two on tablet, one on mobile). Each card has a 16:9 image on top and a text body below with a bold title, optional eyebrow/date, a short description, and a CTA link.",
+  "contentPattern": "Two columns per row: cell 1 is the card image, cell 2 is the card body (title + optional date/eyebrow + description + CTA link). One row per card.",
+  "usage": "Use for a grid of promotional event cards with image, title, date, description and a call to action.",
+  "canonicalModel": "container",
+  "options": [],
+  "memberVariantIds": ["cards-events"]
+}

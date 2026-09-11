@@ -10,6 +10,7 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  readBlockConfig,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -143,6 +144,31 @@ function decorateButtons(main) {
 }
 
 /**
+ * Applies `.section-metadata` blocks to their parent section as classes and
+ * data attributes, then removes the block. The vendored aem.js decorateSections
+ * does not handle section-metadata, so this restores the standard EDS behaviour.
+ * @param {Element} main The main element
+ */
+function decorateSectionMetadata(main) {
+  main.querySelectorAll(':scope > .section .section-metadata').forEach((sectionMeta) => {
+    const section = sectionMeta.closest('.section');
+    const meta = readBlockConfig(sectionMeta);
+    Object.keys(meta).forEach((key) => {
+      if (key === 'style') {
+        const styles = meta.style
+          .split(',')
+          .map((style) => style.trim())
+          .map((style) => style.toLowerCase().replace(/[^0-9a-z]/g, '-'));
+        styles.forEach((style) => section.classList.add(style));
+      } else {
+        section.dataset[key.replace(/-([a-z])/g, (m, c) => c.toUpperCase())] = meta[key];
+      }
+    });
+    sectionMeta.parentNode.remove();
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -151,6 +177,7 @@ export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
+  decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
 }

@@ -1,0 +1,101 @@
+{
+  "templates": [
+    {
+      "name": "campaigns",
+      "urls": [
+        "https://www.heineken.com/us/en/campaigns/player00hub"
+      ],
+      "representativeUrl": "https://www.heineken.com/us/en/campaigns/player00hub",
+      "description": "",
+      "blocks": [
+        {
+          "name": "embed-video",
+          "instances": [
+            "#layout-block-0990071b .rte",
+            "#layout-block-1a5e8ebb .rte"
+          ]
+        },
+        {
+          "name": "cards-events",
+          "instances": [
+            ".cards-grid-v2-block"
+          ]
+        }
+      ],
+      "urlPattern": "/us/en/campaigns/*",
+      "sections": [
+        {
+          "id": "section-1-hero",
+          "name": "Hero",
+          "selector": [
+            ".event-detail__hero"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            ".event-detail__hero"
+          ]
+        },
+        {
+          "id": "section-2-trailer",
+          "name": "Intro / Trailer",
+          "selector": [
+            "#trailer"
+          ],
+          "style": null,
+          "blocks": [],
+          "defaultContent": [
+            "#trailer .rte"
+          ]
+        },
+        {
+          "id": "section-3-video1",
+          "name": "Behind the scenes video",
+          "selector": [
+            "#layout-block-0990071b"
+          ],
+          "style": null,
+          "blocks": [
+            "embed-video"
+          ],
+          "defaultContent": [
+            "#layout-block-0990071b .rte h3"
+          ]
+        },
+        {
+          "id": "section-4-video2",
+          "name": "Best driver video",
+          "selector": [
+            "#layout-block-1a5e8ebb"
+          ],
+          "style": null,
+          "blocks": [
+            "embed-video"
+          ],
+          "defaultContent": [
+            "#layout-block-1a5e8ebb .rte h2",
+            "#layout-block-1a5e8ebb .rte p"
+          ]
+        },
+        {
+          "id": "section-5-events",
+          "name": "Sponsored events",
+          "selector": [
+            "#events"
+          ],
+          "style": "grey",
+          "blocks": [
+            "cards-events"
+          ],
+          "defaultContent": [
+            "#events h1",
+            "#events .arrow-link"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "projectType": "da"
+  }
+}

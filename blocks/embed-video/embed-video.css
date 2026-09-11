@@ -1,0 +1,59 @@
+/* Source: full-width 16:9 YouTube embed, centered in the section container,
+   transparent background, no border-radius (values from source computed styles). */
+.embed-video {
+  width: 100%;
+  max-width: 100%;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.embed-video > div {
+  width: 100%;
+}
+
+.embed-video .embed-video-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+}
+
+.embed-video .embed-video-placeholder > * {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 0;
+}
+
+.embed-video .embed-video-placeholder picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.embed-video .embed-video-placeholder-play button {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(3);
+  width: 22px;
+  height: 22px;
+  border: 2px solid;
+  border-radius: 20px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.embed-video .embed-video-placeholder-play button::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 0;
+  height: 10px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 6px solid;
+  top: 4px;
+  left: 7px;
+}

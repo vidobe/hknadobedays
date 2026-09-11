@@ -1,0 +1,13 @@
+{
+  "status": "success",
+  "url": "https://www.heineken.com/us/en/campaigns/player00hub",
+  "path": "us/en/campaigns/player00hub",
+  "timestamp": "2026-09-11T10:50:08.327Z",
+  "title": "Heineken Player 0.0 | Heineken.com",
+  "template": "campaigns",
+  "blocks": [
+    "embed-video",
+    "embed-video",
+    "cards-events"
+  ]
+}
