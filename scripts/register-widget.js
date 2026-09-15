@@ -37,11 +37,14 @@ async function sendRegistration({ name, email }) {
 
   // `identityMap` belongs inside `xdm` (it is an XDM field; the top-level
   // sendEvent option does not exist and is rejected by Alloy). Namespace `Email`.
+  // Do NOT mark Email `primary: true` — the SDK already sets ECID as primary, and
+  // a conflicting second primary makes Alloy drop the identity from the map (which
+  // is why email never attached). Email stitches as a secondary authenticated id.
   window.alloy('sendEvent', {
     xdm: {
       eventType: 'web.webinteraction.linkClicks',
       identityMap: {
-        Email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
+        Email: [{ id: normalized, authenticatedState: 'authenticated' }],
         ...(emailSha && { Email_SHA256: [{ id: emailSha }] }),
       },
       person: {
