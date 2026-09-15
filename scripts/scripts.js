@@ -61,6 +61,71 @@ const MARTECH_CONFIG = {
 window.dataLayer = window.dataLayer || [];
 
 /**
+ * Builds the XDM for a page-view ExperienceEvent using only STANDARD
+ * `web.webPageDetails` fields (present in every AEP Web SDK ExperienceEvent
+ * schema). The Web SDK auto-collects URL, referrer, device and environment
+ * context; it does NOT set the page name, so we derive a clean one here.
+ *
+ * Note: any site-specific/custom fields depend on the XDM schema mapped to the
+ * datastream (visible only in Data Collection → Datastreams → dataset → schema).
+ * Add them here once that schema's field paths are known.
+ * @returns {Object} the xdm payload
+ */
+function buildPageViewXdm() {
+  const h1 = document.querySelector('main h1');
+  const pageName = (h1?.textContent || document.title || '').trim();
+  const { pathname, href } = window.location;
+  return {
+    eventType: 'web.webpagedetails.pageViews',
+    web: {
+      webPageDetails: {
+        name: pageName,
+        URL: href,
+        pageViews: { value: 1 },
+        siteSection: pathname,
+      },
+      webReferrer: { URL: document.referrer || '' },
+    },
+  };
+}
+
+/**
+ * Wires link-click tracking on the primary CTAs, sending standard
+ * `web.webinteraction.linkClicks` ExperienceEvents. Uses one delegated
+ * listener so links added later (blocks, fragments) are covered too.
+ * `linkType: 'other'` is the XDM enum for a same/other content link;
+ * `exit`/`download` are the alternatives — these CTAs are neither.
+ * @param {Element} scope The root to listen on (document by default)
+ */
+function trackLinkClicks(scope = document) {
+  // The CTAs worth tracking on this campaign page: the hero "Buy" button, the
+  // event-card actions, and the trailing "view all" link.
+  const CTA_SELECTOR = [
+    'main .default-content-wrapper a',
+    'main .cards-events a',
+    'main .embed-video a',
+  ].join(', ');
+
+  scope.addEventListener('click', (e) => {
+    const link = e.target.closest(CTA_SELECTOR);
+    if (!link || !scope.contains(link)) return;
+    const name = (link.textContent || link.getAttribute('aria-label') || '').trim();
+    if (!name) return;
+    sendAnalyticsEvent({
+      eventType: 'web.webinteraction.linkClicks',
+      web: {
+        webInteraction: {
+          name,
+          URL: link.href,
+          linkClicks: { value: 1 },
+          type: 'other',
+        },
+      },
+    });
+  });
+}
+
+/**
  * Renders a code-based (HTML) AJO offer for the hero-offer scope into a
  * placeholder. Visual/VEC offers (authored against a CSS selector) render
  * automatically via the plugin; this handles custom HTML/JSON code offers,
@@ -376,7 +441,10 @@ async function loadLazy(doc) {
   // XHR/Fetch tab, 200). The plugin's built-in page view is disabled
   // (`trackPageView: false`) because it uses a sendBeacon transport that is
   // hidden under the `ping` type and geared for unload rather than initial load.
-  sendEvent({ xdm: { eventType: 'web.webpagedetails.pageViews', web: { webPageDetails: { pageViews: { value: 1 } } } } });
+  sendEvent({ xdm: buildPageViewXdm() });
+
+  // Track clicks on the primary CTAs (link-click events).
+  trackLinkClicks(doc);
 }
 
 /**
