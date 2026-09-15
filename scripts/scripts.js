@@ -456,6 +456,8 @@ function loadDelayed() {
   window.setTimeout(() => {
     martechDelayed(); // loads Launch/Tags container(s) well after LCP
     import('./consent-check.js');
+    // Floating register widget (name + email → registration event to AEP)
+    import('./register-widget.js').then(({ default: initRegisterWidget }) => initRegisterWidget());
     // load anything that can be postponed to the latest here
   }, 3000);
 }
