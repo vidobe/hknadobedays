@@ -49,10 +49,10 @@
   margin: 0;
 }
 
-/* title — green bold serif */
+/* title — blue bold serif (matches site heading color) */
 .cards-events .cards-events-card-body h3 {
   margin: 0;
-  color: var(--brand-color);
+  color: var(--heading-color);
   font-family: var(--heading-font-family);
   font-size: 20px;
   font-weight: 700;

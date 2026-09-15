@@ -438,6 +438,11 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
+  // Register widget (name + email → registration event to AEP). Loaded here in
+  // the lazy phase — right after the header — so its nav icon appears promptly
+  // rather than waiting for the 3s delayed phase.
+  import('./register-widget.js').then(({ default: initRegisterWidget }) => initRegisterWidget());
+
   // Run the lazy martech phase (loads/settles the data layer and analytics).
   await martechLazy();
 
@@ -460,8 +465,6 @@ function loadDelayed() {
   window.setTimeout(() => {
     martechDelayed(); // loads Launch/Tags container(s) well after LCP
     import('./consent-check.js');
-    // Floating register widget (name + email → registration event to AEP)
-    import('./register-widget.js').then(({ default: initRegisterWidget }) => initRegisterWidget());
     // load anything that can be postponed to the latest here
   }, 3000);
 }
