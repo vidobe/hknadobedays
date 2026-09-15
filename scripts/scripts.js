@@ -18,6 +18,7 @@ import {
   martechLazy,
   martechDelayed,
   sendAnalyticsEvent,
+  sendEvent,
   // eslint-disable-next-line import/no-relative-packages
 } from '../plugins/martech/src/index.js';
 
@@ -43,8 +44,21 @@ const MARTECH_CONFIG = {
   dataLayer: true,
   personalization: true,
   decisionScopes: [HERO_OFFER_SCOPE],
+  // Disable the plugin's built-in page view: it is sent with `documentUnloading: true`,
+  // which forces a `navigator.sendBeacon` transport — invisible in the Network XHR/Fetch
+  // filter (shows as a `ping`, 204) and geared for unload rather than initial load. We
+  // send an explicit page view via `sendEvent` in the lazy phase instead (normal fetch, 200).
+  trackPageView: false,
   launchUrls: ['https://assets.adobedtm.com/962ef22b31a8/d5c300c59d31/launch-261b0b21b771-development.min.js'],
 };
+
+// Compatibility shim for the Launch/Tags container. Its `setDataLayer` rule reads a
+// global `window.dataLayer` (classic GTM-style array), but this project uses the Adobe
+// Client Data Layer (`window.adobeDataLayer`). Without this, the rule throws
+// `ReferenceError: dataLayer is not defined` before the martech data layer initializes.
+// Defining it at module scope (before the delayed-phase Launch load) prevents the error;
+// point the Launch rule at `adobeDataLayer` to remove the shim later.
+window.dataLayer = window.dataLayer || [];
 
 /**
  * Renders a code-based (HTML) AJO offer for the hero-offer scope into a
@@ -272,7 +286,9 @@ async function loadEager(doc) {
     decorateMain(main);
     document.body.classList.add('appear');
     await Promise.all([
-      martechLoadedPromise.then(() => martechEager()),
+      martechLoadedPromise
+        .then(() => martechEager())
+        .then((response) => applyHeroOffer(response)),
       loadSection(main.querySelector('.section'), waitForFirstImage),
     ]);
   }
@@ -306,8 +322,14 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
 
-  // Send the deferred analytics/page-view events (kept off the LCP path).
+  // Run the lazy martech phase (loads/settles the data layer and analytics).
   await martechLazy();
+
+  // Send an explicit page view as a normal fetch event (visible in the Network
+  // XHR/Fetch tab, 200). The plugin's built-in page view is disabled
+  // (`trackPageView: false`) because it uses a sendBeacon transport that is
+  // hidden under the `ping` type and geared for unload rather than initial load.
+  sendEvent({ xdm: { eventType: 'web.webpagedetails.pageViews', web: { webPageDetails: { pageViews: { value: 1 } } } } });
 }
 
 /**
