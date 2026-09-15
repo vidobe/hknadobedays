@@ -1,6 +1,6 @@
-/* header and nav layout — Heineken light blue-grey brand bar */
+/* header and nav layout — Heineken green gradient bar */
 header .nav-wrapper {
-  background-color: #d0e0e3;
+  background: linear-gradient(180deg, #04250a 0%, #0c4f10 45%, #13670b 100%);
   width: 100%;
   z-index: 2;
   position: fixed;
@@ -55,7 +55,7 @@ header nav p {
 }
 
 header nav a:any-link {
-  color: var(--brand-color);
+  color: #fff;
 }
 
 /* hamburger */
@@ -177,7 +177,7 @@ header nav .nav-tools ul {
 header nav .nav-tools a:any-link {
   display: inline-flex;
   align-items: center;
-  color: var(--brand-color);
+  color: #fff;
   font-weight: 700;
   font-size: 13px;
   text-transform: uppercase;
@@ -243,7 +243,7 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections .nav-drop {
     position: relative;
-    padding-right: 16px;
+    padding-right: 18px;
     cursor: pointer;
   }
 
@@ -251,8 +251,9 @@ header nav .nav-sections ul > li > ul > li {
     content: '';
     display: inline-block;
     position: absolute;
-    top: 0.5em;
+    top: 50%;
     right: 2px;
+    margin-top: -4px;
     transform: rotate(135deg);
     width: 6px;
     height: 6px;
@@ -262,20 +263,37 @@ header nav .nav-sections ul > li > ul > li {
   }
 
   header nav .nav-sections .nav-drop[aria-expanded='true']::after {
-    top: unset;
-    bottom: 0.5em;
+    margin-top: -1px;
     transform: rotate(315deg);
   }
 
   header nav .nav-sections ul {
     display: flex;
-    gap: 24px;
+    align-items: center;
+    gap: 28px;
     margin: 0;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li {
     flex: 0 1 auto;
     position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Uniform top-level items: same size/weight/spacing whether the item is a
+     plain link (<a>) or a dropdown parent (<p>). Normalize both to one row. */
+  header nav .nav-sections .default-content-wrapper > ul > li > a,
+  header nav .nav-sections .default-content-wrapper > ul > li > p {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul {

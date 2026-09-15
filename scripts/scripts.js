@@ -254,6 +254,50 @@ function decorateSectionMetadata(main) {
   });
 }
 
+// Social links shown in the hero "Share" row (matches the source layout, where the
+// icons sit under the hero banner, right-aligned). Footer keeps its own set.
+const HERO_SHARE_LINKS = [
+  { href: 'https://www.facebook.com/heineken', label: 'Facebook', icon: '/content/images/footer-facebook.svg' },
+  { href: 'https://www.instagram.com/heineken/', label: 'Instagram', icon: '/content/images/footer-instagram.svg' },
+  { href: 'https://www.youtube.com/user/heineken', label: 'YouTube', icon: '/content/images/footer-youtube.svg' },
+];
+
+/**
+ * Appends a right-aligned "Share" social row directly below the hero banner.
+ * The hero is the first section and is default content (a single full-bleed
+ * image), so the row is injected by code rather than authored inline.
+ * @param {Element} main The main element
+ */
+function buildHeroShareRow(main) {
+  const heroSection = main.querySelector(':scope > div');
+  if (!heroSection || !heroSection.querySelector('picture, img')) return;
+  if (heroSection.querySelector('.hero-share')) return; // idempotent
+
+  const share = document.createElement('div');
+  share.className = 'hero-share';
+  const label = document.createElement('span');
+  label.className = 'hero-share-label';
+  label.textContent = 'Share';
+  const list = document.createElement('ul');
+  HERO_SHARE_LINKS.forEach(({ href, label: alt, icon }) => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = href;
+    a.setAttribute('aria-label', alt);
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const img = document.createElement('img');
+    img.src = icon;
+    img.alt = alt;
+    img.loading = 'lazy';
+    a.append(img);
+    li.append(a);
+    list.append(li);
+  });
+  share.append(label, list);
+  heroSection.append(share);
+}
+
 /**
  * Decorates the main element.
  * @param {Element} main The main element
@@ -284,6 +328,9 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    // Hero share row is page-only (not for header/footer fragments, which also
+    // pass through decorateMain), so it runs here against the real page main.
+    buildHeroShareRow(main);
     document.body.classList.add('appear');
     await Promise.all([
       martechLoadedPromise

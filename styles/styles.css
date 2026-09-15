@@ -334,6 +334,44 @@ main > .section:first-of-type .default-content-wrapper img {
   height: auto;
 }
 
+/* Hero "Share" row — social icons under the hero banner, right-aligned (source layout) */
+main > .section:first-of-type .hero-share {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 12px 24px;
+}
+
+main > .section:first-of-type .hero-share-label {
+  color: var(--text-color);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+main > .section:first-of-type .hero-share ul {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+main > .section:first-of-type .hero-share ul li a img {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+
+@media (width >= 900px) {
+  main > .section:first-of-type .hero-share {
+    padding: 12px 32px;
+  }
+}
+
 /* show desktop crop (1st image), hide mobile crop (2nd image) on wide screens */
 main > .section:first-of-type .default-content-wrapper picture:nth-of-type(2) img {
   display: none;
