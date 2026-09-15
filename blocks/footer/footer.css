@@ -177,37 +177,40 @@ footer .footer-signup-form button {
   cursor: pointer;
 }
 
-/* links + social */
+/* links + social — left-aligned column (nav links stacked, social row below) */
 footer .footer-links {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
   padding: 32px 0;
-  border-top: 1px solid rgb(255 255 255 / 20%);
-  text-align: center;
 }
 
 footer .footer-links img {
-  width: 60px;
+  width: 48px;
 }
 
-footer .footer-links ul {
+/* social icon row — horizontal */
+footer .footer-links ul + ul {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px 20px;
+  gap: 14px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-footer .footer-links ul + ul {
-  gap: 16px;
+footer .footer-links ul + ul img {
+  width: 32px;
 }
 
-footer .footer-links ul + ul img {
-  width: 24px;
+/* nav link list — vertical, left-aligned */
+footer .footer-links ul:first-of-type {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 footer .footer-links a:any-link {
@@ -233,5 +236,27 @@ footer .footer-legal {
 @media (width >= 900px) {
   footer .footer {
     padding: 0 32px 32px;
+  }
+
+  /* desktop: promo full-width (row 1), sign-up form (left) + links (right)
+     side by side (row 2), legal full-width (row 3) — matches source. */
+  footer .footer-inner {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    column-gap: 60px;
+  }
+
+  footer .footer-promo,
+  footer .footer-legal {
+    grid-column: 1 / -1;
+  }
+
+  footer .footer-signup {
+    grid-column: 1;
+  }
+
+  footer .footer-links {
+    grid-column: 2;
+    padding-top: 32px;
   }
 }
