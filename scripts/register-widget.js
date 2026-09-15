@@ -35,12 +35,15 @@ async function sendRegistration({ name, email }) {
     emailSha = undefined;
   }
 
+  // Use the lowercase `email` identity namespace — verified against this org's
+  // AEP identity settings. The capitalized `Email` namespace is stripped by the
+  // edge (dropped from the identity map), so a profile lookup would fail.
   window.alloy('sendEvent', {
     xdm: {
       eventType: 'web.webinteraction.linkClicks',
       identityMap: {
-        Email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
-        ...(emailSha && { Email_SHA256: [{ id: emailSha }] }),
+        email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
+        ...(emailSha && { emailSha256: [{ id: emailSha }] }),
       },
       person: {
         name: { fullName: name.trim() },
