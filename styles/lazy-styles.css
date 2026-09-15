@@ -1,67 +1,88 @@
 /* add global styles that can be loaded post LCP here */
 
-/* Register widget — floating button + simple name/email dialog */
-.register-widget {
+/* Register widget — trigger lives in the header nav tools (after EN/ES). */
+.register-widget-item {
+  display: flex;
+  align-items: center;
+}
+
+.register-widget-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* icon — a simple beer can drawn with CSS (white, to match the nav) */
+.register-widget-icon {
+  position: relative;
+  display: block;
+  width: 15px;
+  height: 22px;
+  border: 2px solid #fff;
+  border-radius: 4px / 3px;
+  box-sizing: border-box;
+}
+
+.register-widget-icon::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: -2px;
+  right: -2px;
+  height: 2px;
+  background: #fff;
+}
+
+.register-widget-icon::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: -2px;
+  right: -2px;
+  height: 2px;
+  background: #fff;
+}
+
+.register-widget-trigger:hover .register-widget-icon,
+.register-widget-trigger:focus-visible .register-widget-icon {
+  border-color: #cfe8c9;
+}
+
+.register-widget-trigger:hover .register-widget-icon::before,
+.register-widget-trigger:hover .register-widget-icon::after,
+.register-widget-trigger:focus-visible .register-widget-icon::before,
+.register-widget-trigger:focus-visible .register-widget-icon::after {
+  background: #cfe8c9;
+}
+
+/* floating fallback (only used if the header never rendered) */
+.register-widget-floating {
   position: fixed;
   right: 20px;
   bottom: 20px;
   z-index: 20;
 }
 
-.register-widget-trigger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  padding: 0;
-  border: none;
+.register-widget-floating .register-widget-trigger {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background-color: var(--brand-color);
   box-shadow: 0 4px 12px rgb(0 0 0 / 25%);
-  cursor: pointer;
 }
 
-.register-widget-trigger:hover,
-.register-widget-trigger:focus-visible {
-  background-color: var(--link-hover-color);
-}
-
-/* icon — a simple "add user" glyph drawn with CSS */
-.register-widget-icon {
-  position: relative;
-  display: block;
-  width: 24px;
-  height: 24px;
-}
-
-.register-widget-icon::before {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 7px;
-  width: 10px;
-  height: 10px;
-  border: 2px solid #fff;
-  border-radius: 50%;
-}
-
-.register-widget-icon::after {
-  content: "";
-  position: absolute;
-  bottom: 1px;
-  left: 2px;
-  width: 20px;
-  height: 10px;
-  border: 2px solid #fff;
-  border-bottom: none;
-  border-radius: 10px 10px 0 0;
-}
-
+/* dialog panel — drops down from the top-right, under the header */
 .register-widget-panel {
-  position: absolute;
-  right: 0;
-  bottom: 68px;
+  position: fixed;
+  top: 64px;
+  right: 20px;
+  z-index: 30;
   width: 300px;
   max-width: calc(100vw - 40px);
   padding: 20px;

@@ -57,15 +57,34 @@ async function sendRegistration({ name, email }) {
 }
 
 /**
- * Builds and wires the floating register button + dialog.
+ * Resolves the header nav tools list (where EN/ES live) so the trigger can be
+ * placed after the locale links. The header loads as a fragment in the lazy
+ * phase; this polls briefly in case it is not attached yet.
+ * @returns {Promise<Element|null>} the last `.nav-tools ul`, or null on timeout
  */
-export default function initRegisterWidget() {
-  if (document.querySelector('.register-widget')) return; // idempotent
+function whenNavToolsReady(timeout = 5000) {
+  return new Promise((resolve) => {
+    const find = () => {
+      const lists = document.querySelectorAll('header .nav-tools ul');
+      return lists.length ? lists[lists.length - 1] : null;
+    };
+    const existing = find();
+    if (existing) { resolve(existing); return; }
+    const start = Date.now();
+    const timer = setInterval(() => {
+      const el = find();
+      if (el || Date.now() - start > timeout) {
+        clearInterval(timer);
+        resolve(el || null);
+      }
+    }, 200);
+  });
+}
 
-  const widget = document.createElement('div');
-  widget.className = 'register-widget';
+export default async function initRegisterWidget() {
+  if (document.querySelector('.register-widget-trigger')) return; // idempotent
 
-  // Floating trigger button
+  // Trigger lives inside the header nav tools, after the EN/ES locale links.
   const trigger = document.createElement('button');
   trigger.type = 'button';
   trigger.className = 'register-widget-trigger';
@@ -74,7 +93,21 @@ export default function initRegisterWidget() {
   trigger.setAttribute('aria-expanded', 'false');
   trigger.innerHTML = '<span class="register-widget-icon" aria-hidden="true"></span>';
 
-  // Dialog panel
+  const toolsList = await whenNavToolsReady();
+  if (toolsList) {
+    const li = document.createElement('li');
+    li.className = 'register-widget-item';
+    li.append(trigger);
+    toolsList.append(li);
+  } else {
+    // Fallback: if the header never rendered, float it bottom-right.
+    const fallback = document.createElement('div');
+    fallback.className = 'register-widget register-widget-floating';
+    fallback.append(trigger);
+    document.body.append(fallback);
+  }
+
+  // Dialog panel (appended to body; positioned under the header via CSS).
   const panel = document.createElement('div');
   panel.className = 'register-widget-panel';
   panel.setAttribute('role', 'dialog');
@@ -93,9 +126,7 @@ export default function initRegisterWidget() {
       <button type="submit">Register</button>
       <p class="register-widget-message" role="status" aria-live="polite"></p>
     </form>`;
-
-  widget.append(trigger, panel);
-  document.body.append(widget);
+  document.body.append(panel);
 
   const form = panel.querySelector('form');
   const message = panel.querySelector('.register-widget-message');
