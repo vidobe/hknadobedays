@@ -20,9 +20,9 @@ async function sha256Hex(value) {
 }
 
 /**
- * Sends the registration event to AEP. Sets identityMap.Email (and a hashed
- * variant) so the profile is stitched, and carries the person's name and a
- * form-completion web interaction.
+ * Sends the registration event to AEP. Sets the top-level identityMap under the
+ * `Email` namespace (plus a hashed variant) so the profile stitches on email,
+ * and carries the person's name and a form-completion web interaction.
  * @param {{ name: string, email: string }} data
  */
 async function sendRegistration({ name, email }) {
@@ -35,16 +35,13 @@ async function sendRegistration({ name, email }) {
     emailSha = undefined;
   }
 
-  // Use the lowercase `email` identity namespace — verified against this org's
-  // AEP identity settings. The capitalized `Email` namespace is stripped by the
-  // edge (dropped from the identity map), so a profile lookup would fail.
+  // `identityMap` is a TOP-LEVEL field of the Web SDK event — a sibling of `xdm`,
+  // NOT a child of it. Nesting it under `xdm` (as before) meant the SDK never
+  // promoted it to the event's identity map, so the email never entered the
+  // identity graph (Profile showed only ECID). Namespace symbol is `Email`.
   window.alloy('sendEvent', {
     xdm: {
       eventType: 'web.webinteraction.linkClicks',
-      identityMap: {
-        email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
-        ...(emailSha && { emailSha256: [{ id: emailSha }] }),
-      },
       person: {
         name: { fullName: name.trim() },
       },
@@ -55,6 +52,10 @@ async function sendRegistration({ name, email }) {
           type: 'other',
         },
       },
+    },
+    identityMap: {
+      Email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
+      ...(emailSha && { Email_SHA256: [{ id: emailSha }] }),
     },
   });
 }
