@@ -18,47 +18,17 @@
   cursor: pointer;
 }
 
-/* icon — a simple beer can drawn with CSS (white, to match the nav) */
+/* icon — a traditional "user" glyph (inline SVG), white to match the nav */
 .register-widget-icon {
-  position: relative;
   display: block;
-  width: 15px;
+  width: 22px;
   height: 22px;
-  border: 2px solid #fff;
-  border-radius: 4px / 3px;
-  box-sizing: border-box;
-}
-
-.register-widget-icon::before {
-  content: "";
-  position: absolute;
-  top: 3px;
-  left: -2px;
-  right: -2px;
-  height: 2px;
-  background: #fff;
-}
-
-.register-widget-icon::after {
-  content: "";
-  position: absolute;
-  bottom: 3px;
-  left: -2px;
-  right: -2px;
-  height: 2px;
-  background: #fff;
+  color: #fff;
 }
 
 .register-widget-trigger:hover .register-widget-icon,
 .register-widget-trigger:focus-visible .register-widget-icon {
-  border-color: #cfe8c9;
-}
-
-.register-widget-trigger:hover .register-widget-icon::before,
-.register-widget-trigger:hover .register-widget-icon::after,
-.register-widget-trigger:focus-visible .register-widget-icon::before,
-.register-widget-trigger:focus-visible .register-widget-icon::after {
-  background: #cfe8c9;
+  color: #cfe8c9;
 }
 
 /* floating fallback (only used if the header never rendered) */

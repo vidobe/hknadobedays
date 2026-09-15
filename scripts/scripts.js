@@ -321,10 +321,18 @@ function decorateSectionMetadata(main) {
 
 // Social links shown in the hero "Share" row (matches the source layout, where the
 // icons sit under the hero banner, right-aligned). Footer keeps its own set.
+// Inline SVGs use `currentColor` so CSS can brand-color them (green on the white
+// hero) — the source's footer-*.svg files are white-on-transparent and vanish here.
+const HERO_SHARE_ICONS = {
+  facebook: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M14 8.5h2V6h-2c-1.9 0-3 1.2-3 3v1.5H9V13h2v6h2.5v-6h2L16 10.5h-2.5V9c0-.4.2-.5.5-.5z"/></svg>',
+  instagram: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 8.8A3.2 3.2 0 1 0 12 15.2 3.2 3.2 0 0 0 12 8.8zm0 5.2a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3.4-5.9a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zM17 6.3c-.6-.6-1.4-.8-2.2-.8-.9 0-3.7 0-4.6 0-.8 0-1.6.2-2.2.8s-.8 1.4-.8 2.2c0 .9 0 3.7 0 4.6 0 .8.2 1.6.8 2.2s1.4.8 2.2.8c.9 0 3.7 0 4.6 0 .8 0 1.6-.2 2.2-.8s.8-1.4.8-2.2c0-.9 0-3.7 0-4.6 0-.8-.2-1.6-.8-2.2zm-1 7.6c-.2.5-.6.9-1.1 1.1-.8.3-2.6.2-3.5.2s-2.7.1-3.5-.2c-.5-.2-.9-.6-1.1-1.1-.3-.8-.2-2.6-.2-3.5s-.1-2.7.2-3.5c.2-.5.6-.9 1.1-1.1.8-.3 2.6-.2 3.5-.2s2.7-.1 3.5.2c.5.2.9.6 1.1 1.1.3.8.2 2.6.2 3.5s.1 2.7-.2 3.5z"/></svg>',
+  youtube: '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path fill="currentColor" d="M21.6 8.2a2.5 2.5 0 0 0-1.8-1.8C18.2 6 12 6 12 6s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 8.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 3.8 2.5 2.5 0 0 0 1.8 1.8C5.8 18 12 18 12 18s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-3.8zM10 15V9l5 3z"/></svg>',
+};
+
 const HERO_SHARE_LINKS = [
-  { href: 'https://www.facebook.com/heineken', label: 'Facebook', icon: '/content/images/footer-facebook.svg' },
-  { href: 'https://www.instagram.com/heineken/', label: 'Instagram', icon: '/content/images/footer-instagram.svg' },
-  { href: 'https://www.youtube.com/user/heineken', label: 'YouTube', icon: '/content/images/footer-youtube.svg' },
+  { href: 'https://www.facebook.com/heineken', label: 'Facebook', icon: HERO_SHARE_ICONS.facebook },
+  { href: 'https://www.instagram.com/heineken/', label: 'Instagram', icon: HERO_SHARE_ICONS.instagram },
+  { href: 'https://www.youtube.com/user/heineken', label: 'YouTube', icon: HERO_SHARE_ICONS.youtube },
 ];
 
 /**
@@ -351,11 +359,7 @@ function buildHeroShareRow(main) {
     a.setAttribute('aria-label', alt);
     a.target = '_blank';
     a.rel = 'noopener';
-    const img = document.createElement('img');
-    img.src = icon;
-    img.alt = alt;
-    img.loading = 'lazy';
-    a.append(img);
+    a.innerHTML = icon;
     li.append(a);
     list.append(li);
   });

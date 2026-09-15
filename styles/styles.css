@@ -360,7 +360,16 @@ main > .section:first-of-type .hero-share ul {
   list-style: none;
 }
 
-main > .section:first-of-type .hero-share ul li a img {
+main > .section:first-of-type .hero-share ul li a {
+  display: inline-flex;
+  color: var(--brand-color);
+}
+
+main > .section:first-of-type .hero-share ul li a:hover {
+  color: var(--link-hover-color);
+}
+
+main > .section:first-of-type .hero-share ul li a svg {
   display: block;
   width: 22px;
   height: 22px;
@@ -385,4 +394,36 @@ main > .section:first-of-type .default-content-wrapper picture:nth-of-type(2) im
   main > .section:first-of-type .default-content-wrapper picture:nth-of-type(2) img {
     display: block;
   }
+}
+
+/* Intro / trailer section (second section): blue heading + "Buy" button.
+   The intro is default content — a heading, a paragraph, and a standalone CTA
+   link that we render as a solid green button. */
+main > .section:nth-of-type(2) .default-content-wrapper h1 {
+  color: #003d8f;
+}
+
+/* A paragraph whose only child is a link → render that link as a button.
+   (Targets a different section than the hero-share links above; the ordering
+   warning is a false positive here.) */
+/* stylelint-disable-next-line no-descending-specificity */
+main > .section:nth-of-type(2) .default-content-wrapper p > a:only-child {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 15px 24px;
+  border: 1px solid var(--brand-color);
+  border-radius: 0;
+  background-color: var(--brand-color);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+}
+
+main > .section:nth-of-type(2) .default-content-wrapper p > a:only-child:hover,
+main > .section:nth-of-type(2) .default-content-wrapper p > a:only-child:focus-visible {
+  border-color: var(--link-hover-color);
+  background-color: var(--link-hover-color);
+  color: #fff;
+  text-decoration: none;
 }

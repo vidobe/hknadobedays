@@ -91,7 +91,7 @@ export default async function initRegisterWidget() {
   trigger.setAttribute('aria-label', 'Register');
   trigger.setAttribute('aria-haspopup', 'dialog');
   trigger.setAttribute('aria-expanded', 'false');
-  trigger.innerHTML = '<span class="register-widget-icon" aria-hidden="true"></span>';
+  trigger.innerHTML = '<svg class="register-widget-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 2c-3.3 0-8 1.7-8 5v1h16v-1c0-3.3-4.7-5-8-5z"/></svg>';
 
   const toolsList = await whenNavToolsReady();
   if (toolsList) {
