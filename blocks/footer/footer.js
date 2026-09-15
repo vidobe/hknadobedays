@@ -79,6 +79,21 @@ export default async function decorate(block) {
     if (classes[i]) section.classList.add(`footer-${classes[i]}`);
   });
 
+  // Promo: group the copy (heading + text + button) into one element so it can
+  // be overlaid as a single card on top of the full-width can image.
+  const promo = footer.querySelector('.footer-promo .default-content-wrapper')
+    || footer.querySelector('.footer-promo');
+  if (promo) {
+    const copy = document.createElement('div');
+    copy.className = 'footer-promo-copy';
+    // Move everything except the leading image paragraph into the copy card.
+    [...promo.children].forEach((child) => {
+      const isImageP = child.tagName === 'P' && child.querySelector('img');
+      if (!isImageP) copy.append(child);
+    });
+    if (copy.children.length) promo.append(copy);
+  }
+
   // build the sign-up form into the signup section (after logo + tagline)
   const signup = footer.querySelector('.footer-signup');
   if (signup) buildSignupForm(signup);

@@ -24,29 +24,34 @@ footer .footer img {
   height: auto;
 }
 
-/* promo — "Get Heineken on Demand": a light band above the green footer, with a
-   green heading, promo image, and a solid green Buy button (matches source). */
+/* promo — "Get Heineken on Demand": a light band above the green footer.
+   The can image spans full width; the copy card overlays on the right, on top
+   of the image (matches source). Full-bleed out of the footer wrapper padding. */
 footer .footer-promo {
-  display: grid;
-  gap: 24px;
-  align-items: center;
-  padding: 32px 0;
+  position: relative;
+  margin: 0 -24px;
   background-color: #fff;
   color: var(--text-color);
-}
-
-footer .footer-promo h3 {
-  margin: 0 0 8px;
-  color: var(--heading-color);
 }
 
 footer .footer-promo p {
   color: var(--text-color);
 }
 
+/* first paragraph holds the full-width can image (background layer) */
+footer .footer-promo > p:first-child {
+  margin: 0;
+}
+
 footer .footer-promo img {
+  display: block;
   width: 100%;
   vertical-align: bottom;
+}
+
+footer .footer-promo h3 {
+  margin: 0 0 8px;
+  color: var(--heading-color);
 }
 
 footer .footer-promo a:any-link {
@@ -68,35 +73,77 @@ footer .footer-promo a:focus-visible {
   border-color: var(--link-hover-color);
 }
 
-/* sign-up form */
+/* The copy (heading + text + button) is grouped into .footer-promo-copy by
+   footer.js so it can be overlaid as one block. */
+footer .footer-promo-copy {
+  padding: 24px;
+}
+
+/* On wider screens, overlay the copy card on the right, on top of the
+   full-width image. Image and copy share one grid cell (stacked). */
+@media (width >= 900px) {
+  footer .footer-promo .default-content-wrapper {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  footer .footer-promo .default-content-wrapper > p:first-child,
+  footer .footer-promo-copy {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  footer .footer-promo-copy {
+    z-index: 1;
+    justify-self: end;
+    width: min(46%, 560px);
+    margin-right: 4%;
+    padding: 28px 32px;
+    background: rgb(255 255 255 / 92%);
+  }
+}
+
+/* sign-up form — left-aligned, two-column field grid */
 footer .footer-signup {
   padding: 32px 0;
-  text-align: center;
 }
 
 footer .footer-signup img {
   width: 140px;
-  margin: 0 auto 16px;
+  margin: 0 0 16px;
   display: block;
 }
 
 footer .footer-signup-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 520px;
-  margin: 16px auto 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  max-width: 720px;
+  margin: 16px 0 0;
 }
 
 footer .footer-signup-form input[type="text"],
 footer .footer-signup-form input[type="email"],
 footer .footer-signup-form input[type="tel"] {
-  padding: 12px 14px;
+  padding: 14px 16px;
   border: 1px solid #999;
   border-radius: 8px;
   background: #dcdcdc;
   color: #333;
   font: inherit;
+}
+
+/* birth date spans both columns */
+footer .footer-signup-form input[name="birthDate"] {
+  grid-column: 1 / -1;
+}
+
+/* consent rows, note, and submit span both columns */
+footer .footer-consent,
+footer .footer-required-note,
+footer .footer-signup-form button {
+  grid-column: 1 / -1;
 }
 
 footer .footer-consent {
@@ -113,13 +160,14 @@ footer .footer-consent input {
 }
 
 footer .footer-required-note {
-  text-align: left;
   font-size: 12px;
 }
 
 footer .footer-signup-form button {
+  justify-self: start;
+  min-width: 180px;
   margin-top: 4px;
-  padding: 15px 20px;
+  padding: 15px 24px;
   border: 2px solid #000;
   border-radius: 0;
   background: #fff;
@@ -176,13 +224,14 @@ footer .footer-legal {
   opacity: 0.85;
 }
 
+@media (width >= 600px) {
+  footer .footer-signup-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (width >= 900px) {
   footer .footer {
     padding: 0 32px 32px;
-  }
-
-  footer .footer-promo {
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
   }
 }
