@@ -35,13 +35,15 @@ async function sendRegistration({ name, email }) {
     emailSha = undefined;
   }
 
-  // `identityMap` is a TOP-LEVEL field of the Web SDK event — a sibling of `xdm`,
-  // NOT a child of it. Nesting it under `xdm` (as before) meant the SDK never
-  // promoted it to the event's identity map, so the email never entered the
-  // identity graph (Profile showed only ECID). Namespace symbol is `Email`.
+  // `identityMap` belongs inside `xdm` (it is an XDM field; the top-level
+  // sendEvent option does not exist and is rejected by Alloy). Namespace `Email`.
   window.alloy('sendEvent', {
     xdm: {
       eventType: 'web.webinteraction.linkClicks',
+      identityMap: {
+        Email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
+        ...(emailSha && { Email_SHA256: [{ id: emailSha }] }),
+      },
       person: {
         name: { fullName: name.trim() },
       },
@@ -52,10 +54,6 @@ async function sendRegistration({ name, email }) {
           type: 'other',
         },
       },
-    },
-    identityMap: {
-      Email: [{ id: normalized, primary: true, authenticatedState: 'authenticated' }],
-      ...(emailSha && { Email_SHA256: [{ id: emailSha }] }),
     },
   });
 }
